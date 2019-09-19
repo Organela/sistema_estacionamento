@@ -14,7 +14,7 @@ public class FabricaConexao {
 			Class.forName("com.mysql.jdbc.Driver");
 			
 			this.conexao = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/estacionamento",
+					"jdbc:mysql://localhost:3306/Sistema_Estacionamento",
 					"root",
 					""
 					);

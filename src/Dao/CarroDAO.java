@@ -7,11 +7,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import Model.Carro;
-import Model.Vaga;
+import Model.Cliente;
 
 
 
-public class CarroDAO implements CarroInDAO {
+
+public class CarroDAO implements CarroInDAO {//Vai lidar com a parte de banco de dados referente a Carro
 	
 	private Connection conexao = null;
 	
@@ -21,19 +22,16 @@ public class CarroDAO implements CarroInDAO {
 	@Override
 	public void Inserir(Carro _objeto) throws SQLException {
 		// TODO Auto-generated method stub
-		String SQL = "INSERT INTO carro (placa, nome) VALUES (?, ?, ?)";
+		String SQL = "INSERT INTO carro (placa, nome) VALUES (?, ?)";
 		
 		PreparedStatement ps = this.conexao.prepareStatement(SQL);
 		
-		Vaga v = new Vaga();
-		for(int i = 1; i <= 20; i++) {//Insere em vaga vazia
+		
+				ps.setString(1, _objeto.getNome());//Seta o parametro do primeiro `?`
+				ps.setString(2, _objeto.getPlaca());//Seta o paramentro do segundo `?`
+				
 			
-			if(v.isStatus() != true) {
-				ps.setString(i, _objeto.getNome());
-				ps.setString(i, _objeto.getPlaca());
-				break;
-			}
-		}
+		
 		
 		ps.execute();
 	}
@@ -51,16 +49,23 @@ public class CarroDAO implements CarroInDAO {
 		
 		rs = ps.executeQuery();
 		
-		while (rs.next()) {
+		while (rs.next()) {//Adicionando informações de no Banco em sua Classe
+			
+			Carro carro = new Carro();
 			
 			int id = rs.getInt(1);
 			String placa = rs.getString(2);
 			String nome = rs.getString(3);
 			
+			carro.setId(rs.getInt(1));
+			carro.setPlaca(rs.getString(2));
+			carro.setNome(rs.getString(3));
 			
-			Carro c = new Carro(id, placa, nome);
+			ClienteDAO daoCli = new ClienteDAO(this.conexao);
+			List<Cliente>cliente = daoCli.listarClientePorCarro(id);
+			carro.setCliente(cliente);
 			
-			carros.add(c);
+			carros.add(carro);
 			
 			
 		}
@@ -79,27 +84,29 @@ public class CarroDAO implements CarroInDAO {
 		
 		ps.setInt(1, _id);
 		
-		Vaga v = new Vaga();//Número Vaga = _id Carro
-		v.setStatus(false);
+		boolean rs;
+		rs = ps.execute();
 		
-		return ps.execute();
+		return rs;
 		
 	}
 
 	@Override
 	public Boolean Atualizar(Carro _objeto) throws SQLException {
 		// TODO Auto-generated method stub
-		String SQL = "UPDATE carro SET id = ?, placa = ?, nome = ? WHERE id = ?";
+		String SQL = "UPDATE carro placa = ?, nome = ? WHERE id = ?";
 		
 		PreparedStatement ps = this.conexao.prepareStatement(SQL);
 		
-		ps.setInt(1, _objeto.getId());
-		ps.setString(2, _objeto.getPlaca());
-		ps.setString(3, _objeto.getNome());
 		
+		ps.setString(1, _objeto.getPlaca());
+		ps.setString(2, _objeto.getNome());
+		ps.setInt(3, _objeto.getId());
+	
+		boolean rs;
+		rs = ps.execute();
 		
-		
-		return ps.execute();
+		return rs;//Caso a query seja executada com sucesso retornará um valor boleano
 		
 	}
 
@@ -108,9 +115,9 @@ public class CarroDAO implements CarroInDAO {
 		// TODO Auto-generated method stub
 		
 		ResultSet rs = null;
-		Carro c = null;
+	
 		
-		String SQL = "SELECT id, placa, nome FROM pessoa WHERE id = ?";
+		String SQL = "SELECT * FROM pessoa WHERE id = ?";
 		
 		PreparedStatement ps = this.conexao.prepareStatement(SQL);
 		
@@ -119,18 +126,55 @@ public class CarroDAO implements CarroInDAO {
 		rs = ps.executeQuery();
 		
 		if (rs.next()) {
-			
+			Carro carro = new Carro();
 			int id = rs.getInt(1);
-			String placa = rs.getString(2);
-			String nome = rs.getString(3);
+			
+			carro.setId(rs.getInt(1));
+			carro.setNome(rs.getString(2));
+			carro.setPlaca(rs.getString(3));
+			
+			ClienteDAO daoCli = new ClienteDAO(this.conexao);
+			List<Cliente> cliente = daoCli.listarClientePorCarro(id);
 			
 			
-			c = new Carro(id, placa, nome);
+			return carro;
+			
 		}
 		
-		return c;
+		return null;
 		
 		
 	}
+	@Override
+	public List<Carro> listarCarroPorHistorico(int _idCarro) throws SQLException {
+		// TODO Auto-generated method stub
+		ResultSet rs = null;
+		List<Carro> carro = new ArrayList<Carro>();
+		String SQL = "SELECT id, placa, nome from carro where Carro_id = ?";
+		
+		PreparedStatement ps = this.conexao.prepareStatement(SQL);
+		ps.setInt(1, _idCarro); 
+		
+		rs = ps.executeQuery();
+		
+		while (rs.next()) {
+			
+			Carro car = new Carro();
+			
+			car.setId(rs.getInt(1));
+			car.setPlaca(rs.getString(2));
+			car.setNome(rs.getString(3));
+		
+			
+			
+			
+			carro.add(car);
+		}
+		
+		return carro;
+		
+	}
+	
+
 
 }
