@@ -26,12 +26,13 @@ public class HistoricoDAO implements HistoricoInDAO {
 	public void Inserir(Historico _objeto) throws SQLException {
 		// TODO Auto-generated method stub
 		
-		String SQL = "insert into historico (data, preco) values (?, ?)"; // Os ? são parâmetros para o sql
+		String SQL = "insert into historico (data, preco, horas) values (?, ?, ?)"; // Os ? são parâmetros para o sql
 		
 		java.sql.PreparedStatement ps = this.conexao.prepareStatement(SQL);
 		
 		ps.setString(1, _objeto.getData()); // Ele seta o parâmetro do primeiro ?
-
+		ps.setFloat(2, _objeto.getPreco());
+		ps.setDouble(3, _objeto.getHoras());
 		ps.execute(); // Executa a query
 		
 	}
@@ -43,7 +44,7 @@ public class HistoricoDAO implements HistoricoInDAO {
 		List<Historico> historico = new ArrayList<Historico>();
 		ResultSet rs = null;
 		
-		String SQL = "select id, data, preco from historico";
+		String SQL = "select data, preco, horas from historico";
 				
 		java.sql.PreparedStatement ps = this.conexao.prepareStatement(SQL);
 		
@@ -55,29 +56,31 @@ public class HistoricoDAO implements HistoricoInDAO {
 			
 			// Configurando os atributos da pessoa a ser adicionada a lista
 			
-			int id = rs.getInt(1);
-			String data = rs.getString(2);
-		
-			h.setId(rs.getInt(1)); 
-			h.setData(rs.getString(2));
-			h.setPreco(rs.getFloat(3));
 			
-			// Get baseado no tipo da coluna (getInt, getString) e o inteiro é o número da coluna na query,
+			String data = rs.getString(1);
+			
+			
+			
+			h.setData(rs.getString(1));
+			h.setPreco(rs.getFloat(2));
+			h.setHoras(rs.getDouble(3));
+			
+			/* Get baseado no tipo da coluna (getint, getstring) e o inteiro é o número da coluna na query,*/
 			
 			ClienteDAO daoCli = new ClienteDAO(this.conexao);
-			List<Cliente>cliente = daoCli.listarClientePorHistorico(id);
+			List<Cliente>cliente = daoCli.listarClientePorHistorico(data);
 			h.setCliente(cliente);
 			
 			CarroDAO daoCar = new CarroDAO(this.conexao);
-			List<Carro>carro = daoCar.listarCarroPorHistorico(id);
+			List<Carro>carro = daoCar.listarCarroPorHistorico(data);
 			h.setCarro(carro);
 			
 			VagaDAO daoVag = new VagaDAO(this.conexao);
-			List<Vaga>vaga = daoVag.listarVagaPorHistorico(id);// Implementar método
+			List<Vaga>vaga = daoVag.listarVagaPorHistorico(data);// Implementar método
 			h.setVaga(vaga);
 			
 			FuncionarioDAO daoFunc = new FuncionarioDAO(this.conexao);
-			List<Funcionario>funcionario = daoFunc.listarFuncionarioPorHistorico(id);// Implementar metodo listarCarroPorCliente
+			List<Funcionario>funcionario = daoFunc.listarFuncionarioPorHistorico(data);// Implementar metodo listarCarroPorCliente
 			h.setFuncionario(funcionario);
 			
 			
@@ -92,17 +95,17 @@ public class HistoricoDAO implements HistoricoInDAO {
 	
 
 	@Override
-	public Boolean Excluir(int _id) throws SQLException {
+	public Boolean Excluir(int _data) throws SQLException {
 		// TODO Auto-generated method stub
 		
 		boolean rs = false;
 		
-		String SQL = "delete from historico where id=?";
+		String SQL = "delete from historico where data=?";
 
 				
 		java.sql.PreparedStatement ps = this.conexao.prepareStatement(SQL);
 		
-		ps.setInt(1, _id);
+		ps.setInt(1, _data);
 		
 		rs = ps.execute(); // Caso a query seja executada com sucesso retornará um valor booleano
 		return rs; 
@@ -115,15 +118,16 @@ public class HistoricoDAO implements HistoricoInDAO {
 		
 		boolean rs = false;
 		
-		String SQL = "update historico set id=?, data=?, preco=? where id=?";
+		String SQL = "update historico set data=?, preco=?, horas=? where data=?";
 				
 		java.sql.PreparedStatement ps = this.conexao.prepareStatement(SQL);
 		
 
 		
-		ps.setInt(1, _objeto.getId());
-		ps.setString(2, _objeto.getData());
-		ps.setFloat(3, _objeto.getPreco());
+		
+		ps.setString(1, _objeto.getData());
+		ps.setFloat(2, _objeto.getPreco());
+		ps.setDouble(3, _objeto.getHoras());
 		
 		rs = ps.execute(); // Caso a query seja executada com sucesso retornará um valor booleano
 		
@@ -133,16 +137,16 @@ public class HistoricoDAO implements HistoricoInDAO {
 	}
 
 	@Override
-	public Historico buscarPorId(int _id) throws SQLException {
+	public Historico buscarPorData(String _data) throws SQLException {
 		// TODO Auto-generated method stub
 		
 		ResultSet rs = null;
 		
-		String SQL = "Select * from historico where id=?"; // Com base no id passado por parâmetro ele vai encontrar a pessoa
+		String SQL = "Select * from historico where data=?"; // Com base no id passado por parâmetro ele vai encontrar a pessoa
 				
 		java.sql.PreparedStatement ps = this.conexao.prepareStatement(SQL);
 		
-		ps.setInt(1, _id); // Faz a substituição do ? pelo id passado por parâmetro
+		ps.setString(1, _data); // Faz a substituição do ? pelo id passado por parâmetro
 		// É utilizado o prepared statement ao invés da concatenação dos parâmetros por questão de segurança
 		rs = ps.executeQuery();
 		
@@ -150,22 +154,23 @@ public class HistoricoDAO implements HistoricoInDAO {
 		
 		if(rs.next()) {
 			Historico h = new Historico();
-			int id = rs.getInt(1);
-			h.setId(id); 
-			h.setData(rs.getString(2)); 
-			h.setPreco(rs.getFloat(3)); 
+			String data = rs.getString(1);
+			 
+			h.setData(data); 
+			h.setPreco(rs.getFloat(2)); 
+			h.setHoras(rs.getDouble(3));
 			
 			ClienteDAO daoCli = new ClienteDAO(this.conexao);
-			List<Cliente>cliente = daoCli.listarClientePorHistorico(id);
+			List<Cliente>cliente = daoCli.listarClientePorHistorico(data);
 			
 			CarroDAO daoCar = new CarroDAO(this.conexao);
-			List<Carro>carro = daoCar.listarCarroPorHistorico(id);
+			List<Carro>carro = daoCar.listarCarroPorHistorico(data);
 			
 			VagaDAO daoVag = new VagaDAO(this.conexao);
-			List<Vaga>vaga = daoVag.listarVagaPorHistorico(id);
+			List<Vaga>vaga = daoVag.listarVagaPorHistorico(data);
 			
 			FuncionarioDAO daoFunc = new FuncionarioDAO(this.conexao);
-			List<Funcionario>funcionario = daoFunc.listarFuncionarioPorHistorico(id);
+			List<Funcionario>funcionario = daoFunc.listarFuncionarioPorHistorico(data);
 			
 			return h; // Ao encotrar o historico
 		}

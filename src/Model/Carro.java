@@ -30,8 +30,8 @@ public class Carro implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public int id;
-	public String placa;
-	public String nome;
+	private String placa;
+	private String nome;
 	
 	private List<Cliente> cliente;// Mover para classe historico
 	

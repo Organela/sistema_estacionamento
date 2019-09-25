@@ -5,26 +5,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
- * CREATE TABLE`Historico` (
+CREATE TABLE`Historico` (
   	`Carro_id` INT NOT NULL,
   	`Carro_Cliente_id` INT NOT NULL,
   	`Vaga_id` INT NOT NULL,
-  	`Data` DATE NULL,
-  	`Funcionario_id` INT NOT NULL,
-  	`id` INT NOT NULL,
-  	PRIMARY KEY (`id`),
+  	`horas`TIME NULL,
+  	`data` DATE NULL,
+    `Funcionario_id` INT NOT NULL,
+    `preco` DOUBLE,
+  
+  	PRIMARY KEY (`Carro_id`,`data`),
+    
   	FOREIGN KEY (`Carro_id`)REFERENCES carro(`id`),
   	FOREIGN KEY (`Carro_Cliente_id`)REFERENCES cliente(`id`),
   	FOREIGN KEY (`Vaga_id`) REFERENCES vaga(`id`),
     FOREIGN KEY (`Funcionario_id`) REFERENCES funcionario(`id`)   
+);
 );
 
  */
 public class Historico implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	private int id;
+
 	private String data;
+	private double horas;
 	private float preco;
 	
 	private List<Cliente>cliente;
@@ -45,27 +50,16 @@ public class Historico implements Serializable {
 
 
 
-	public Historico(int id, String data, List<Cliente> cliente, List<Carro> carro, List<Vaga> vaga,
+	public Historico(String data, double horas, float preco, List<Cliente> cliente, List<Carro> carro, List<Vaga> vaga,
 			List<Funcionario> funcionario) {
 		super();
-		this.id = id;
 		this.data = data;
+		this.horas = horas;
+		this.preco = preco;
 		this.cliente = cliente;
 		this.carro = carro;
 		this.vaga = vaga;
 		this.funcionario = funcionario;
-	}
-
-
-
-	public int getId() {
-		return id;
-	}
-
-
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 
@@ -78,6 +72,18 @@ public class Historico implements Serializable {
 
 	public void setData(String data) {
 		this.data = data;
+	}
+
+
+
+	public double getHoras() {
+		return horas;
+	}
+
+
+
+	public void setHoras(double horas) {
+		this.horas = horas;
 	}
 
 
@@ -148,12 +154,9 @@ public class Historico implements Serializable {
 
 
 
-
-
-
 	@Override
 	public String toString() {
-		return "Historico [id=" + id + ", data=" + data + ", preco=" + preco + ", cliente=" + cliente + ", carro="
+		return "Historico [data=" + data + ", horas=" + horas + ", preco=" + preco + ", cliente=" + cliente + ", carro="
 				+ carro + ", vaga=" + vaga + ", funcionario=" + funcionario + "]";
 	}
 
@@ -167,7 +170,9 @@ public class Historico implements Serializable {
 		result = prime * result + ((cliente == null) ? 0 : cliente.hashCode());
 		result = prime * result + ((data == null) ? 0 : data.hashCode());
 		result = prime * result + ((funcionario == null) ? 0 : funcionario.hashCode());
-		result = prime * result + id;
+		long temp;
+		temp = Double.doubleToLongBits(horas);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + Float.floatToIntBits(preco);
 		result = prime * result + ((vaga == null) ? 0 : vaga.hashCode());
 		return result;
@@ -204,7 +209,7 @@ public class Historico implements Serializable {
 				return false;
 		} else if (!funcionario.equals(other.funcionario))
 			return false;
-		if (id != other.id)
+		if (Double.doubleToLongBits(horas) != Double.doubleToLongBits(other.horas))
 			return false;
 		if (Float.floatToIntBits(preco) != Float.floatToIntBits(other.preco))
 			return false;
@@ -216,6 +221,12 @@ public class Historico implements Serializable {
 		return true;
 	}
 
+
+
+	
+
+
+	
 
 
 

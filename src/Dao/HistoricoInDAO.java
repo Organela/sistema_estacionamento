@@ -15,5 +15,9 @@ void Inserir(Historico _objeto) throws SQLException;
 	
 	Boolean Atualizar(Historico _objeto) throws SQLException;
 	
-	Historico buscarPorId(int _id) throws SQLException;
+	
+
+	
+
+	Historico buscarPorData(String _data)throws SQLException;
 }

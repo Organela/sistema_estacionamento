@@ -148,7 +148,7 @@ public class FuncionarioDAO implements FuncionarioInDAO {
 		return null;
 	}
 
-	public List<Funcionario> listarFuncionarioPorHistorico(int _id) throws SQLException {
+	public List<Funcionario> listarFuncionarioPorHistorico(String data) throws SQLException {
 		// TODO Auto-generated method stub
 		
 		ResultSet rs = null;
@@ -156,7 +156,7 @@ public class FuncionarioDAO implements FuncionarioInDAO {
 		String SQL = "SELECT * from endereco where pessoa_id = ?";
 		
 		PreparedStatement ps = this.conexao.prepareStatement(SQL);
-		ps.setInt(1, _id); 
+		ps.setString(1, data); 
 		
 		rs = ps.executeQuery();
 		

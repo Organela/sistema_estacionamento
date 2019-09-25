@@ -140,7 +140,7 @@ public class VagaDAO implements VagaInDAO {
 	}
 
 	@Override
-	public List<Vaga> listarVagaPorHistorico(int _id) throws SQLException {
+	public List<Vaga> listarVagaPorHistorico(String data) throws SQLException {
 		// TODO Auto-generated method stub
 		
 		ResultSet rs = null;
@@ -148,7 +148,7 @@ public class VagaDAO implements VagaInDAO {
 		String SQL = "SELECT id, status from vaga where Vaga_id = ?";
 		
 		java.sql.PreparedStatement ps = this.conexao.prepareStatement(SQL);
-		ps.setInt(1, _id); 
+		ps.setString(1, data); 
 		
 		rs = ps.executeQuery();
 		

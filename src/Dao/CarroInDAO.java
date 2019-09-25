@@ -18,7 +18,7 @@ public interface CarroInDAO {
 	
 	Carro buscarPorId(int _id) throws SQLException;
 
-	List<Carro> listarCarroPorHistorico(int _idCarro) throws SQLException;
+	List<Carro> listarCarroPorHistorico(String _idCarro) throws SQLException;
 	
 	
 }

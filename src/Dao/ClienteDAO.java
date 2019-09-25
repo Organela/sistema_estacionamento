@@ -174,14 +174,14 @@ ResultSet rs = null;
 	}
 
 
-	public List<Cliente> listarClientePorHistorico(int _id) throws SQLException {
+	public List<Cliente> listarClientePorHistorico(String data) throws SQLException {
 		// TODO Auto-generated method stub
 		ResultSet rs = null;
 		List<Cliente> cliente = new ArrayList<Cliente>();
 		String SQL = "SELECT id, nome, tel  from cliente where Cliente_id = ?";
 		
 		PreparedStatement ps = this.conexao.prepareStatement(SQL);
-		ps.setInt(1, _id); 
+		ps.setString(1, data); 
 		
 		rs = ps.executeQuery();
 		

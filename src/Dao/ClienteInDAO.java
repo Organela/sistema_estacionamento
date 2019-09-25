@@ -19,5 +19,5 @@ public interface ClienteInDAO {
 	
 	List<Cliente> listarClientePorCarro(int _idCliente) throws SQLException;
 	
-	List<Cliente> listarClientePorHistorico(int _idCliente)throws SQLException;
+	List<Cliente> listarClientePorHistorico(String data)throws SQLException;
 }

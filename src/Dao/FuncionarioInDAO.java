@@ -17,5 +17,5 @@ public interface FuncionarioInDAO {
 	
 	Funcionario buscarPorId(int _id) throws SQLException;
 	
-	public List<Funcionario> listarFuncionarioPorHistorico(int id) throws SQLException;
+	public List<Funcionario> listarFuncionarioPorHistorico(String _data) throws SQLException;
 }
