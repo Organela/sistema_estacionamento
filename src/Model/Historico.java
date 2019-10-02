@@ -3,7 +3,7 @@ package Model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Date;
 /*
 CREATE TABLE`Historico` (
   	`Carro_id` INT NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE`Historico` (
   	`horas`TIME NULL,
   	`data` DATE NULL,
     `Funcionario_id` INT NOT NULL,
-    `preco` DOUBLE,
+    
   
   	PRIMARY KEY (`Carro_id`,`data`),
     
@@ -24,12 +24,13 @@ CREATE TABLE`Historico` (
 );
 
  */
+
 public class Historico implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 
-	private String data;
-	private double horas;
+	private Date data;
+	
 	private float preco;
 	
 	private List<Cliente>cliente;
@@ -50,11 +51,10 @@ public class Historico implements Serializable {
 
 
 
-	public Historico(String data, double horas, float preco, List<Cliente> cliente, List<Carro> carro, List<Vaga> vaga,
+	public Historico(Date data, float preco, List<Cliente> cliente, List<Carro> carro, List<Vaga> vaga,
 			List<Funcionario> funcionario) {
 		super();
 		this.data = data;
-		this.horas = horas;
 		this.preco = preco;
 		this.cliente = cliente;
 		this.carro = carro;
@@ -64,26 +64,18 @@ public class Historico implements Serializable {
 
 
 
-	public String getData() {
+	
+
+
+
+	public Date getData() {
 		return data;
 	}
 
 
 
-	public void setData(String data) {
+	public void setData(Date data) {
 		this.data = data;
-	}
-
-
-
-	public double getHoras() {
-		return horas;
-	}
-
-
-
-	public void setHoras(double horas) {
-		this.horas = horas;
 	}
 
 
@@ -156,8 +148,8 @@ public class Historico implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Historico [data=" + data + ", horas=" + horas + ", preco=" + preco + ", cliente=" + cliente + ", carro="
-				+ carro + ", vaga=" + vaga + ", funcionario=" + funcionario + "]";
+		return "Historico [data=" + data + ", preco=" + preco + ", cliente=" + cliente + ", carro=" + carro + ", vaga="
+				+ vaga + ", funcionario=" + funcionario + "]";
 	}
 
 
@@ -170,9 +162,6 @@ public class Historico implements Serializable {
 		result = prime * result + ((cliente == null) ? 0 : cliente.hashCode());
 		result = prime * result + ((data == null) ? 0 : data.hashCode());
 		result = prime * result + ((funcionario == null) ? 0 : funcionario.hashCode());
-		long temp;
-		temp = Double.doubleToLongBits(horas);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + Float.floatToIntBits(preco);
 		result = prime * result + ((vaga == null) ? 0 : vaga.hashCode());
 		return result;
@@ -209,8 +198,6 @@ public class Historico implements Serializable {
 				return false;
 		} else if (!funcionario.equals(other.funcionario))
 			return false;
-		if (Double.doubleToLongBits(horas) != Double.doubleToLongBits(other.horas))
-			return false;
 		if (Float.floatToIntBits(preco) != Float.floatToIntBits(other.preco))
 			return false;
 		if (vaga == null) {
@@ -223,6 +210,7 @@ public class Historico implements Serializable {
 
 
 
+	
 	
 
 

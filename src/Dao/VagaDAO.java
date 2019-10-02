@@ -1,5 +1,6 @@
 package Dao;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -140,7 +141,7 @@ public class VagaDAO implements VagaInDAO {
 	}
 
 	@Override
-	public List<Vaga> listarVagaPorHistorico(String data) throws SQLException {
+	public List<Vaga> listarVagaPorHistorico(java.util.Date data) throws SQLException {
 		// TODO Auto-generated method stub
 		
 		ResultSet rs = null;
@@ -148,8 +149,8 @@ public class VagaDAO implements VagaInDAO {
 		String SQL = "SELECT id, status from vaga where Vaga_id = ?";
 		
 		java.sql.PreparedStatement ps = this.conexao.prepareStatement(SQL);
-		ps.setString(1, data); 
 		
+		ps.setDate(1, new Date(data.getTime()));
 		rs = ps.executeQuery();
 		
 		while (rs.next()) {

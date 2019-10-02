@@ -1,5 +1,6 @@
 package Dao;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -148,7 +149,7 @@ public class FuncionarioDAO implements FuncionarioInDAO {
 		return null;
 	}
 
-	public List<Funcionario> listarFuncionarioPorHistorico(String data) throws SQLException {
+	public List<Funcionario> listarFuncionarioPorHistorico(java.util.Date data) throws SQLException {
 		// TODO Auto-generated method stub
 		
 		ResultSet rs = null;
@@ -156,7 +157,7 @@ public class FuncionarioDAO implements FuncionarioInDAO {
 		String SQL = "SELECT * from endereco where pessoa_id = ?";
 		
 		PreparedStatement ps = this.conexao.prepareStatement(SQL);
-		ps.setString(1, data); 
+		ps.setDate(1, new Date(data.getTime()));
 		
 		rs = ps.executeQuery();
 		

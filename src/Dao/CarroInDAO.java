@@ -1,10 +1,11 @@
 package Dao;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import Model.Carro;
-import Model.Cliente;
+
 
 public interface CarroInDAO {
 
@@ -18,7 +19,9 @@ public interface CarroInDAO {
 	
 	Carro buscarPorId(int _id) throws SQLException;
 
-	List<Carro> listarCarroPorHistorico(String _idCarro) throws SQLException;
+	//List<Carro> listarCarroPorHistorico(String _idCarro) throws SQLException;
+
+	List<Carro> listarCarroPorHistorico(Date data) throws SQLException;
 	
 	
 }

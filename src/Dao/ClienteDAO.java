@@ -1,6 +1,7 @@
 package Dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -174,15 +175,15 @@ ResultSet rs = null;
 	}
 
 
-	public List<Cliente> listarClientePorHistorico(String data) throws SQLException {
+	public List<Cliente> listarClientePorHistorico(java.util.Date data) throws SQLException {
 		// TODO Auto-generated method stub
 		ResultSet rs = null;
 		List<Cliente> cliente = new ArrayList<Cliente>();
 		String SQL = "SELECT id, nome, tel  from cliente where Cliente_id = ?";
 		
 		PreparedStatement ps = this.conexao.prepareStatement(SQL);
-		ps.setString(1, data); 
-		
+
+		ps.setDate(1, new Date(data.getTime()));
 		rs = ps.executeQuery();
 		
 		while (rs.next()) {

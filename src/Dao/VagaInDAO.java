@@ -17,5 +17,5 @@ public interface VagaInDAO {
 	
 	Vaga buscarPorId(int _id) throws SQLException;
 	
-	public List<Vaga> listarVagaPorHistorico(String _data) throws SQLException;
+	public List<Vaga> listarVagaPorHistorico(java.util.Date data) throws SQLException;
 }

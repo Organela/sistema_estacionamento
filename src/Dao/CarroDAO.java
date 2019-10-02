@@ -1,6 +1,7 @@
 package Dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 import java.sql.PreparedStatement;
@@ -146,15 +147,15 @@ public class CarroDAO implements CarroInDAO {//Vai lidar com a parte de banco de
 		
 	}
 	@Override
-	public List<Carro> listarCarroPorHistorico(String data) throws SQLException {
+	public List<Carro> listarCarroPorHistorico(java.util.Date data) throws SQLException {
 		// TODO Auto-generated method stub
 		ResultSet rs = null;
 		List<Carro> carro = new ArrayList<Carro>();
 		String SQL = "SELECT id, placa, nome from carro where Carro_id = ?";
 		
 		PreparedStatement ps = this.conexao.prepareStatement(SQL);
-		ps.setString(1, data); 
-		
+		 
+		ps.setDate(1, new Date(data.getTime()));
 		rs = ps.executeQuery();
 		
 		while (rs.next()) {
